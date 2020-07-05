@@ -1,5 +1,6 @@
 package com.edisonmaciel.cmcjava;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.edisonmaciel.cmcjava.domain.Cidade;
 import com.edisonmaciel.cmcjava.domain.Cliente;
 import com.edisonmaciel.cmcjava.domain.Endereco;
 import com.edisonmaciel.cmcjava.domain.Estado;
+import com.edisonmaciel.cmcjava.domain.Pagamento;
+import com.edisonmaciel.cmcjava.domain.PagamentoComBoleto;
+import com.edisonmaciel.cmcjava.domain.PagamentoComCartão;
+import com.edisonmaciel.cmcjava.domain.Pedido;
 import com.edisonmaciel.cmcjava.domain.Produto;
+import com.edisonmaciel.cmcjava.domain.enums.EstadoPagamento;
 import com.edisonmaciel.cmcjava.domain.enums.TipoCliente;
 import com.edisonmaciel.cmcjava.repositories.CategoriaRepository;
 import com.edisonmaciel.cmcjava.repositories.CidadeRepository;
 import com.edisonmaciel.cmcjava.repositories.ClienteRepository;
 import com.edisonmaciel.cmcjava.repositories.EnderecoRepository;
 import com.edisonmaciel.cmcjava.repositories.EstadoRepository;
+import com.edisonmaciel.cmcjava.repositories.PagamentoRepository;
+import com.edisonmaciel.cmcjava.repositories.PedidoRepository;
 import com.edisonmaciel.cmcjava.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class CmcJavaApplication implements CommandLineRunner{
 	ClienteRepository clienteRepository;
 	@Autowired
 	EnderecoRepository enderecoRepository;
+	@Autowired
+	PedidoRepository pedidoRepository;
+	@Autowired
+	PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CmcJavaApplication.class, args);
@@ -68,7 +80,7 @@ public class CmcJavaApplication implements CommandLineRunner{
 		Estado est1 = new Estado(null, "Minas Gerais");
 		Estado est2 = new Estado(null, "São Paulo");
 		
-		Cidade c1 = new Cidade(null, "Uberlândia", est1);
+		Cidade c1 = new Cidade(null, "Coronatown", est1);
 		Cidade c2 = new Cidade(null, "São Paulo", est2);
 		Cidade c3 = new Cidade(null, "Campinas", est2);
 		
@@ -78,16 +90,30 @@ public class CmcJavaApplication implements CommandLineRunner{
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
-		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "33739578452", TipoCliente.PESSOAFISICA);
+		Cliente cli1 = new Cliente(null, "Edison Maciel", "edison@maciel.com", "33739578452", TipoCliente.PESSOAFISICA);
 		cli1.getTelefones().addAll(Arrays.asList("35248564", "958745865"));
 		
-		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 203", "Centro", "03854712", cli1, c1);
-		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "24758695", cli1, c2);
+		Endereco e1 = new Endereco(null, "Rua Alguma Coisa", "300", "Apto 203", "Centro", "03854712", cli1, c1);
+		Endereco e2 = new Endereco(null, "Rua Teste", "105", "Sala 800", "Centro", "24758695", cli1, c2);
 		
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 		
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
+		
+		Pagamento pagto1 = new PagamentoComCartão(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 		
 		
 		
