@@ -13,6 +13,7 @@ import com.edisonmaciel.cmcjava.domain.Cidade;
 import com.edisonmaciel.cmcjava.domain.Cliente;
 import com.edisonmaciel.cmcjava.domain.Endereco;
 import com.edisonmaciel.cmcjava.domain.Estado;
+import com.edisonmaciel.cmcjava.domain.ItemPedido;
 import com.edisonmaciel.cmcjava.domain.Pagamento;
 import com.edisonmaciel.cmcjava.domain.PagamentoComBoleto;
 import com.edisonmaciel.cmcjava.domain.PagamentoComCartão;
@@ -25,6 +26,7 @@ import com.edisonmaciel.cmcjava.repositories.CidadeRepository;
 import com.edisonmaciel.cmcjava.repositories.ClienteRepository;
 import com.edisonmaciel.cmcjava.repositories.EnderecoRepository;
 import com.edisonmaciel.cmcjava.repositories.EstadoRepository;
+import com.edisonmaciel.cmcjava.repositories.ItemPedidoRepository;
 import com.edisonmaciel.cmcjava.repositories.PagamentoRepository;
 import com.edisonmaciel.cmcjava.repositories.PedidoRepository;
 import com.edisonmaciel.cmcjava.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class CmcJavaApplication implements CommandLineRunner{
 	PedidoRepository pedidoRepository;
 	@Autowired
 	PagamentoRepository pagamentoRepository;
+	@Autowired
+	ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CmcJavaApplication.class, args);
@@ -115,7 +119,18 @@ public class CmcJavaApplication implements CommandLineRunner{
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
 		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 		
 	}
 
