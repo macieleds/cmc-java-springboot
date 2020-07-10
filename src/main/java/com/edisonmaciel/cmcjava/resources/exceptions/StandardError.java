@@ -2,8 +2,6 @@ package com.edisonmaciel.cmcjava.resources.exceptions;
 
 import java.io.Serializable;
 
-import org.springframework.http.HttpStatus;
-
 public class StandardError implements Serializable{
 	private static final long serialVersionUID = 1L;
 
