@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.edisonmaciel.cmcjava.domain.Categoria;
+import com.edisonmaciel.cmcjava.dto.CategoriaDTO;
 import com.edisonmaciel.cmcjava.repositories.CategoriaRepository;
 import com.edisonmaciel.cmcjava.services.exceptions.DataIntegrityException;
 import com.edisonmaciel.cmcjava.services.exceptions.ObjectNotFoundException;
@@ -54,6 +55,10 @@ public class CategoriaService {
 	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repository.findAll(pageRequest);
+	}
+	
+	public Categoria fromDTO(CategoriaDTO objDto) {
+		return new Categoria(objDto.getId(), objDto.getNome());
 	}
 
 }
