@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.edisonmaciel.cmcjava.domain.Categoria;
 import com.edisonmaciel.cmcjava.domain.Cliente;
 import com.edisonmaciel.cmcjava.dto.ClienteDTO;
 import com.edisonmaciel.cmcjava.dto.ClienteNewDTO;
