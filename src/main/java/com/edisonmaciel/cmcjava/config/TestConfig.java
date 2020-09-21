@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.edisonmaciel.cmcjava.services.DBService;
+import com.edisonmaciel.cmcjava.services.EmailService;
+import com.edisonmaciel.cmcjava.services.MockEmailService;
 
 @Configuration
 @Profile("test")
@@ -23,6 +25,11 @@ public class TestConfig {
 		
 		
 		return true;
+	}
+	
+	@Bean
+	public EmailService emailService() {
+		return new MockEmailService();
 	}
 
 }

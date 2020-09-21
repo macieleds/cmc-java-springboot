@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.edisonmaciel.cmcjava.domain.ItemPedido;
 import com.edisonmaciel.cmcjava.domain.PagamentoComBoleto;
@@ -37,6 +36,9 @@ public class PedidoService {
 	@Autowired
 	private ClienteService clienteService;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	public Pedido find (Integer id) {
 		Optional<Pedido> obj = repository.findById(id);
 		return obj.orElseThrow (()-> new ObjectNotFoundException(
@@ -63,7 +65,7 @@ public class PedidoService {
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
-		System.out.println(obj);
+		emailService.sendOrderConfirmationEmail(obj);
 		return obj;
 	
 	}
