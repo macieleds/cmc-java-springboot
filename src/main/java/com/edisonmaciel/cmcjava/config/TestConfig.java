@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.edisonmaciel.cmcjava.services.DBService;
 import com.edisonmaciel.cmcjava.services.EmailService;
-import com.edisonmaciel.cmcjava.services.MockEmailService;
+import com.edisonmaciel.cmcjava.services.SmtpEmailService;
 
 @Configuration
 @Profile("test")
@@ -27,9 +27,13 @@ public class TestConfig {
 		return true;
 	}
 	
-	@Bean
+	/*@Bean
 	public EmailService emailService() {
 		return new MockEmailService();
-	}
+	}*/
 
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
+	}
 }
